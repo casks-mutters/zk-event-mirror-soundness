@@ -40,6 +40,21 @@ Emit JSON for CI:
 - Shows **✅ MIRROR SOUND** when `abs(src_count - dst_count) ≤ allow_drift`, else **❌ MIRROR MISMATCH**.  
 - Exit codes: `0` on soundness; `2` on mismatch or fetch failures.
 
+## Example Output
+### Perfect parity
+📊 Source events: 1200  
+📊 Destination events: 1200  
+📏 Drift: 0 (allowed ≤ 0)  
+✅ MIRROR SOUND — perfect event parity detected.  
+⏱️ Completed in 1.45s  
+
+### Within drift tolerance
+📊 Source events: 2000  
+📊 Destination events: 1998  
+📏 Drift: 2 (allowed ≤ 5)  
+🟡 MIRROR SOUND (within drift tolerance).  
+⏱️ Completed in 1.60s  
+
 ## Notes
 - Use **stable tags** (e.g., finalized/safe equivalents per chain) by converting them to block numbers before running, if your provider supports it; this tool expects numeric ranges.  
 - For proxies or upgradable systems, ensure you’re checking the **emitting** address (proxy vs implementation).  
