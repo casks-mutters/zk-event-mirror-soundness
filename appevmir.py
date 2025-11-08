@@ -146,8 +146,22 @@ def main() -> None:
     print(f"📊 Source events: {src_count}")
     print(f"📊 Destination events: {dst_count}")
     print(f"📏 Drift: {drift} (allowed ≤ {args.allow_drift})")
-    print("✅ MIRROR SOUND" if ok else "❌ MIRROR MISMATCH")
+       # ✅ New: Print the time when the comparison was made
+    from datetime import datetime
+    timestamp = datetime.utcnow().isoformat() + "Z"
+    print(f"🕒 Comparison Timestamp: {timestamp}")
 
+    if ok and src_count == dst_count:
+        print("✅ MIRROR SOUND — perfect event parity detected.")
+    elif ok and src_count != dst_count:
+        print("🟡 MIRROR SOUND (within drift tolerance).")
+    elif drift > args.allow_drift and src_count > dst_count:
+        print("🔴 Mirror lagging: Destination chain missing events.")
+    elif drift > args.allow_drift and src_count < dst_count:
+        print("🟠 Mirror overshooting: Extra events on destination chain.")
+    else:
+        print("❌ MIRROR MISMATCH — unexpected event discrepancy.")
+    
     elapsed = round(time.time() - start, 2)
     print(f"⏱️ Completed in {elapsed:.2f}s")
 
